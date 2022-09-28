@@ -72,7 +72,7 @@ def confirm_checkout(request):
     user = User.objects.get(id=session["client_reference_id"])
     user.payment.client_reference_id = session["client_reference_id"]
     user.payment.payment_status = session["payment_status"]
-    user.save()
+    user.payment.save()
 
     session_obj = Session.objects.create(
         user = user,
