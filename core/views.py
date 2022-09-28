@@ -50,7 +50,7 @@ def signup(request):
 
     user = User.objects.create_user(username=email, email=email, password=password)
 
-    Payment.objects.get_or_create(
+    Payment.objects.create(
         user=user,
         client_reference_id=str(user.id),
         payment_status="unpaid"
@@ -70,16 +70,9 @@ def confirm_checkout(request):
     session = stripe.checkout.Session.retrieve(session_id)
 
     user = User.objects.get(id=session["client_reference_id"])
-
-    payment = Payment.objects.get(
-        user=user,
-        client_reference_id=session["client_reference_id"],
-        payment_status=session["payment_status"]
-    )
-
-    payment.client_reference_id = session["client_reference_id"]
-    payment.payment_status = session["payment_status"]
-    payment.save()
+    user.payment.client_reference_id = session["client_reference_id"]
+    user.payment.payment_status = session["payment_status"]
+    user.save()
 
     session_obj = Session.objects.create(
         user = user,
