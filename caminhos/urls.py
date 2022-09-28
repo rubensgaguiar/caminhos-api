@@ -25,5 +25,5 @@ urlpatterns = [
     path('core/caminhos', views.caminhos),
     path('core/logout', views.logout),
     path('core/signup', views.signup),
-    path('core/confirm_payment', views.confirm_payment),
+    path('core/confirm_checkout', views.confirm_checkout),
 ]
