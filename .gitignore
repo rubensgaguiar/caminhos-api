@@ -1,3 +1,5 @@
 node_modules/
 __pycache__/
+caminhos/static/
 .python-version
+db.sqlite3
