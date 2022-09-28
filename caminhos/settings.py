@@ -137,10 +137,20 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS  = [
-    "http://localhost:3000",
-]
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000'
-]
+if IS_HEROKU:
+    CORS_ALLOWED_ORIGINS  = [
+        "https://caminhos.vercel.app"
+    ]
+
+    CSRF_TRUSTED_ORIGINS = [
+        "https://caminhos.vercel.app"
+    ]
+else:
+    CORS_ALLOWED_ORIGINS  = [
+        "http://localhost:3000"
+    ]
+
+    CSRF_TRUSTED_ORIGINS = [
+        "http://localhost:3000"
+    ]
