@@ -1,10 +1,11 @@
+import os
 import stripe
 
 from datetime import datetime
 
 from core.models import Payment, Session, CustomerDetails, CustomerAddress
 
-stripe.api_key = "sk_test_51HqiHpFm7x7XSTxAXGegtstsdrB3MJKlfwrfxGdZN8AfLJTdSm5QyHqbOQr3IO40uPenLpNG70LrCeNsynXNh0b500Chtup5xE"
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
