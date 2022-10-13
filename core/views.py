@@ -1,10 +1,11 @@
+import os
 import stripe
 
 from datetime import datetime
 
 from core.models import Payment, Session, CustomerDetails, CustomerAddress
 
-stripe.api_key = "sk_test_51HqiHpFm7x7XSTxAXGegtstsdrB3MJKlfwrfxGdZN8AfLJTdSm5QyHqbOQr3IO40uPenLpNG70LrCeNsynXNh0b500Chtup5xE"
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
@@ -50,7 +51,7 @@ def signup(request):
 
     user = User.objects.create_user(username=email, email=email, password=password)
 
-    Payment.objects.get_or_create(
+    Payment.objects.create(
         user=user,
         client_reference_id=str(user.id),
         payment_status="unpaid"
@@ -70,12 +71,9 @@ def confirm_checkout(request):
     session = stripe.checkout.Session.retrieve(session_id)
 
     user = User.objects.get(id=session["client_reference_id"])
-
-    Payment.objects.get_or_create(
-        user=user,
-        client_reference_id=session["client_reference_id"],
-        payment_status=session["payment_status"]
-    )
+    user.payment.client_reference_id = session["client_reference_id"]
+    user.payment.payment_status = session["payment_status"]
+    user.payment.save()
 
     session_obj = Session.objects.create(
         user = user,
