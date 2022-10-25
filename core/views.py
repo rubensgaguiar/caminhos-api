@@ -49,6 +49,16 @@ def signup(request):
     email = request.data['email']
     password = request.data['password']
 
+    user = auth.authenticate(username=email, email=email, password=password)
+    if user is not None:
+        auth.login(request, user)
+        # Redirect to a success page.
+        return JsonResponse({
+            "id": user.id,
+            "email": user.email,
+            "payment_status": user.payment.payment_status
+        })
+
     user = User.objects.create_user(username=email, email=email, password=password)
 
     Payment.objects.create(
